@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>Inicio</title>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    </head>
+    <body>
+        <iframe width="500px" height="500px" id="frame">
+
+        </iframe>
+        <script>
+            $.ajax({
+                method:"GET",
+                url:"/test",
+                headers:{
+                    Authorization:"app"
+                },
+                xhr:()=>{
+                    var xhrOverride = new XMLHttpRequest();
+                    xhrOverride.responseType = 'arraybuffer';
+                    return xhrOverride;
+                }
+            }).then(res=>{
+                console.log(res);
+                var blob = new Blob([res],{type:"application/pdf"});
+                var fileURL = URL.createObjectURL(blob);
+                $("#frame").attr("src",fileURL);
+                //Abre una nueva pestaña
+                //var win = window.open(fileURL);
+                //win.focus();
+            },e=>alert("Error"));
+            $.ajax({
+                method:"GET",
+                url:"/fail",
+                headers:{
+                    Authorization:"app"
+                },
+                xhr:()=>{
+                    var xhrOverride = new XMLHttpRequest();
+                    xhrOverride.responseType = 'arraybuffer';
+                    return xhrOverride;
+                }
+            }).then(res=>{
+                console.log(res);
+                var blob = new Blob([res],{type:"image/png"});
+                var fileURL = URL.createObjectURL(blob);
+                $("#frame2").attr("src",fileURL);
+                //Abre una nueva pestaña
+                //var win = window.open(fileURL);
+                //win.focus();
+            },e=>alert("Error"));
+        </script>
+    </body>
+</html>
